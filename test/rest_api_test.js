@@ -3,26 +3,30 @@
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var expect = chai.expect;
+var sequelize = require('sequelize');
 
-var mongoose = require('mongoose');
-var Rabbit = require('../lib/models/models.js').Rabbit;
+var models = require('../lib/models/models.js');
 
 chai.use(chaiHttp);
 
 var server = require('../lib/server.js'); //run our server
 
+var testRabbit;
+
 describe('Single-Resource REST API', function() {
 
   before(function(done) {
     server.once('started', function() {
+      //sequelize.sync(); //unnecessary
+      console.log('');
+      console.log('Tests started:');
+      console.log('');
       done();
     });
   });
   after(function(done) {
-    mongoose.connection.db.dropDatabase(function() {
-      //mongoose.connection.db.emit('first tests done');
-      done();
-    });
+    done();
+    //Rabbit.drop(); //clear the database
   });
 
   it('should be able to add a new rabbit', function(done) {
@@ -32,8 +36,9 @@ describe('Single-Resource REST API', function() {
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.status).to.eql(200);
-        expect(res.body).to.have.property('_id');
+        expect(res.body).to.have.property('id');
         expect(res.body.name).to.eql('Shrubs');
+        expect(res.body.weight).to.eql(10);
         done();
       });
   });
@@ -52,25 +57,26 @@ describe('Single-Resource REST API', function() {
 });
 
 describe('REST API continued', function() {
-  var testRabbit;
-  beforeEach(function(done) {
-    testRabbit = new Rabbit({name: 'Buckles', weight: '6'});
-    testRabbit.save(function(err, data) {
-      if (err) throw err;
-      testRabbit = data;
+  before(function(done) {
+    testRabbit = models.Rabbit.create({name: 'Buckles', weight: '6'})
+    .then(function() {
       done();
     });
   });
-  after(function(done) {
-    mongoose.connection.db.dropDatabase(function() {
-      done();
-    });
-  });
+  /*afterEach(function(done) { //Uncomment to manually check the column
+    chai.request('localhost:3000')
+      .get('/rabbits')
+      .end(function(err, res) {
+        expect(err).to.eql(null);
+        console.log(res.body);
+        done();
+      });
+  });*/
 
   it('should be able to update a rabbit', function(done) {
     chai.request('localhost:3000')
       .put('/rabbits')
-      .send({name: 'Buckles 2', weight: 11, _id: testRabbit._id}) //that got dark quickly!
+      .send({name: 'Buckles 2', weight: 11, id: testRabbit._boundTo.id}) //that got dark quickly!
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.status).to.eql(200);
@@ -82,7 +88,7 @@ describe('REST API continued', function() {
   it('should be able to delete a rabbit', function(done) {
     chai.request('localhost:3000')
       .delete('/rabbits')
-      .send({_id: testRabbit._id}) //(Buckles 2 just wasn't the same as Buckles 1)
+      .send({id: testRabbit._boundTo.id}) //(Buckles 2 just wasn't the same as Buckles 1)
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.status).to.eql(200);
