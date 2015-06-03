@@ -31,3 +31,7 @@ database
 
 #settings!
 .env
+
+#build
+build
+test/client/test_bundle.js
