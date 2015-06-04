@@ -5,21 +5,29 @@
     <title>Interactive Rabbit Database</title>
   </head>
   <body data-ng-app="rabbitsApp">
-    <main data-ng-controller="rabbitsController">
+    <main data-ng-controller="rabbitsController" data-ng-init="getAll()">
       <h1>This is for tracking a database of rabbits! Because, rabbits.</h1>
       <p>You can see how many rabbits currently exist, update a given rabbit,
          and add or remove a rabbit from the database.</p>
-      <h1>{{greeting}}</h1>
-      <input type="text" data-ng-model="greeting">
-      <button data-ng-click="displayGreeting()">Alert!</button>
-      <section data-ng-controller="oneMoreController">
-        <h2>Nested: {{greeting}}</h2>
-      </section>
+
+      <h2>Rabbits: </h2>
+      <aside data-ng-if="errors.length">
+        <h3>Errors:</h3>
+        <ul data-ng-repeat="error in errors">
+          <li>{{error.msg}}</li>
+        </ul>
+        <button data-ng-click="errors = []">Clear Errors</button>
+      </aside>
+      <ul data-ng-repeat="rabbit in rabbits">
+        <li>{{rabbit.name}}<button data-ng-click="removeRabbit(rabbit)">Remove</button></li>
+      </ul>
+
+      <form name="newRabbitForm" data-ng-submit="createNewRabbit()">
+        <input type="text" data-ng-model="newRabbit.name">
+        <input type="text" data-ng-model="newRabbit.weight">
+        <button type="submit">Add new rabbit</button>
+      </form>
     </main>
-    <section data-ng-controller="anotherController">
-      <h1>Part two: {{greeting}}</h1>
-      <input type="text" data-ng-model="greeting">
-    </section>
     <script type="text/javascript" src="bundle.js"></script>
   </body>
 </html>

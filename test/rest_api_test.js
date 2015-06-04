@@ -96,8 +96,8 @@ describe('REST API continued', function() {
 
   it('should be able to delete a rabbit', function(done) {
     chai.request('localhost:3000')
-      .delete('/rabbits')
-      .send({eat: token, _id: testRabbit._id}) //(Buckles 2 just wasn't the same as Buckles 1)
+      .delete('/rabbits/' + testRabbit._id)
+      //.send({eat: token, _id: testRabbit._id}) //(Buckles 2 just wasn't the same as Buckles 1)
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.status).to.eql(200);
