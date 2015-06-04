@@ -4,14 +4,22 @@
     <meta charset="UTF-8">
     <title>Interactive Rabbit Database</title>
   </head>
-  <body>
-    <main data-ng-app="rabbitsApp">
-    <h1>This is for tracking a database of rabbits! Because, rabbits.</h1>
-    <p>You can see how many rabbits currently exist, update a given rabbit,
-       and add or remove a rabbit from the database.</p>
-    <h1>{{greeting}}</h1>
+  <body data-ng-app="rabbitsApp">
+    <main data-ng-controller="rabbitsController">
+      <h1>This is for tracking a database of rabbits! Because, rabbits.</h1>
+      <p>You can see how many rabbits currently exist, update a given rabbit,
+         and add or remove a rabbit from the database.</p>
+      <h1>{{greeting}}</h1>
       <input type="text" data-ng-model="greeting">
+      <button data-ng-click="displayGreeting()">Alert!</button>
+      <section data-ng-controller="oneMoreController">
+        <h2>Nested: {{greeting}}</h2>
+      </section>
     </main>
+    <section data-ng-controller="anotherController">
+      <h1>Part two: {{greeting}}</h1>
+      <input type="text" data-ng-model="greeting">
+    </section>
     <script type="text/javascript" src="bundle.js"></script>
   </body>
 </html>
