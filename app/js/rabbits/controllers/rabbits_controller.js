@@ -21,16 +21,15 @@ module.exports = function(app) { //app === an angular module
     $scope.createNewRabbit = function() {
       $scope.rabbits.push($scope.newRabbit);
       var newRabbitIndex = $scope.rabbits.indexOf($scope.newRabbit); //In case we fail and need to remove it
-      $scope.newRabbit.submitting = true;
       $http.post('/rabbits', $scope.newRabbit)
         .success(function(data) {
-          $scope.newRabbit = null; //(newRabbit.submitting will also become falsy)
+          $scope.newRabbit = null;
+          $scope.rabbits[newRabbitIndex] = data;
         })
         .error(function(data) {
           console.log(data);
           $scope.errors.push({msg: 'could not create new rabbit.'});
           $scope.rabbits.splice(newRabbitIndex, 1); //remove our wrongly-created rabbit
-          $scope.newRabbit.submitting = false;
         });
     };
 
@@ -48,24 +47,28 @@ module.exports = function(app) { //app === an angular module
 
     $scope.saveRabbit = function(rabbit) {
       rabbit.editing = false; //Send it back to our database to be saved, the extra property (editing) will be ignored.
-      var origName = rabbit.name; //Is it okay to keep closure variables like these in the model?
-      var origWeight = rabbit.weight;
-      rabbit.name = rabbit.newName;
-      rabbit.weight = rabbit.newWeight;
 
       $http.put('/rabbits', rabbit)
+        .success(function(data) {
+          rabbit.origRabbit = null;
+        })
         .error(function(data) {
           console.log(data);
           $scope.errors.push({msg: 'could not update rabbit'});
-          rabbit.name = origName;
-          rabbit.weight = origWeight;
+          cancelEdit(rabbit); //Can I do this?
         });
+    };
+
+    $scope.editRabbit = function(rabbit) {
+      rabbit.editing = true;
+      rabbit.origRabbit = angular.copy(rabbit);
     };
 
     $scope.cancelEdit = function(rabbit) {
       rabbit.editing = false;
-      rabbit.newName = '';
-      rabbit.newWeight = '';
+      rabbit.name = rabbit.origRabbit.name;
+      rabbit.weight = rabbit.origRabbit.weight;
+      rabbit.origRabbit = null;
     };
 
     $scope.clearErrors = function() {
