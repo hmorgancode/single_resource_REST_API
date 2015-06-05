@@ -10,22 +10,35 @@
       <p>You can see how many rabbits currently exist, update a given rabbit,
          and add or remove a rabbit from the database.</p>
 
-      <h2>Rabbits: </h2>
+      <!-- Error List -->
       <aside data-ng-if="errors.length">
         <h3>Errors:</h3>
         <ul data-ng-repeat="error in errors">
           <li>{{error.msg}}</li>
         </ul>
-        <button data-ng-click="errors = []">Clear Errors</button>
+        <button data-ng-click="clearErrors()">Clear Errors</button>
       </aside>
+
+      <!-- Editable list of Rabbits -->
+      <h2>Rabbits: </h2>
       <ul data-ng-repeat="rabbit in rabbits">
-        <li>{{rabbit.name}}<button data-ng-click="removeRabbit(rabbit)">Remove</button></li>
+        <li>{{rabbit.name}}
+          <button data-ng-click="removeRabbit(rabbit)">Remove</button>
+          <button data-ng-if="!rabbit.editing" data-ng-click="rabbit.editing = true">Edit</button>
+          <form name="{{'editing' + rabbit._id}}" data-ng-if="rabbit.editing" data-ng-submit="saveRabbit(rabbit)">
+            Name: <input type="text" name="name" required data-ng-model="rabbit.newName">
+            Weight: <input type="number" name="weight" min="0" max="20" required data-ng-model="rabbit.newWeight">
+            <button type="submit">Save Changes</button>
+            <button data-ng-click="cancelEdit(rabbit)">Cancel</button>
+          </form>
+        </li>
       </ul>
 
-      <form name="newRabbitForm" data-ng-submit="createNewRabbit()">
-        <input type="text" data-ng-model="newRabbit.name">
-        <input type="text" data-ng-model="newRabbit.weight">
-        <button type="submit">Add new rabbit</button>
+      <!-- New Rabbit Form -->
+      <form name="newRabbitForm" data-ng-if="!newRabbit.submitting" data-ng-submit="createNewRabbit(newRabbit)">
+        Name: <input type="text" name="name" required data-ng-model="newRabbit.name">
+        Weight: <input type="number" name="weight" min="0" max="20" required data-ng-model="newRabbit.weight">
+        <button type="submit" data-ng-disabled="newRabbitForm.$invalid">Add new rabbit</button>
       </form>
     </main>
     <script type="text/javascript" src="bundle.js"></script>

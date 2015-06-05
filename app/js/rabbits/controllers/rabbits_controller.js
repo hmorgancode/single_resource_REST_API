@@ -19,25 +19,61 @@ module.exports = function(app) { //app === an angular module
     };
 
     $scope.createNewRabbit = function() {
+      $scope.rabbits.push($scope.newRabbit);
+      var newRabbitIndex = $scope.rabbits.indexOf($scope.newRabbit); //In case we fail and need to remove it
+      $scope.newRabbit.submitting = true;
       $http.post('/rabbits', $scope.newRabbit)
         .success(function(data) {
-          $scope.rabbits.push(data);
-          $scope.newRabbit = null;
+          $scope.newRabbit = null; //(newRabbit.submitting will also become falsy)
         })
         .error(function(data) {
           console.log(data);
           $scope.errors.push({msg: 'could not create new rabbit.'});
+          $scope.rabbits.splice(newRabbitIndex, 1); //remove our wrongly-created rabbit
+          $scope.newRabbit.submitting = false;
         });
     };
 
     $scope.removeRabbit = function(rabbit) {
-      $scope.rabbits.splice($scope.rabbits.indexOf(rabbit), 1); //We immediately remove the rabbit from our list, to be responsive
+      var rabbitIndex = $scope.rabbits.indexOf(rabbit);
+      $scope.rabbits.splice(rabbitIndex, 1); //We immediately remove the rabbit from our list, to be responsive
                                                                 //(If the request fails, we'll go back and inform the user.)
       $http.delete('/rabbits/' + rabbit._id)//, {params: {id: rabbit._id}})
         .error(function(data) {
           console.log(data);
           $scope.errors.push({msg: 'could not remove rabbit ' + rabbit.name});
+          $scope.rabbits.splice(rabbitIndex, 0, rabbit); //Add the rabbit back to our list
       });
+    };
+
+    $scope.saveRabbit = function(rabbit) {
+      rabbit.editing = false; //Send it back to our database to be saved, the extra property (editing) will be ignored.
+      var origName = rabbit.name; //Is it okay to keep closure variables like these in the model?
+      var origWeight = rabbit.weight;
+      rabbit.name = rabbit.newName;
+      rabbit.weight = rabbit.newWeight;
+
+      $http.put('/rabbits', rabbit)
+        .error(function(data) {
+          console.log(data);
+          $scope.errors.push({msg: 'could not update rabbit'});
+          rabbit.name = origName;
+          rabbit.weight = origWeight;
+        });
+    };
+
+    $scope.cancelEdit = function(rabbit) {
+      rabbit.editing = false;
+      rabbit.newName = '';
+      rabbit.newWeight = '';
+    };
+
+    $scope.clearErrors = function() {
+      $scope.errors = []; //same result as when we just had this line (errors = []) in html instead of calling clearErrors
+      //If you change objects inside of the view, it won't call $scope.apply
+      //But if we modify $scope (meaning, we're OUTSIDE of the view, i.e. here, it'll call $scope.apply
+        //and redraw the entire screen. This is one of the reasons Angular is considered slow, and one of what React is reacting to.)
+      $scope.getAll();
     };
   }]);
 };
