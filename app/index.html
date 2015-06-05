@@ -4,13 +4,42 @@
     <meta charset="UTF-8">
     <title>Interactive Rabbit Database</title>
   </head>
-  <body>
-    <main data-ng-app="rabbitsApp">
-    <h1>This is for tracking a database of rabbits! Because, rabbits.</h1>
-    <p>You can see how many rabbits currently exist, update a given rabbit,
-       and add or remove a rabbit from the database.</p>
-    <h1>{{greeting}}</h1>
-      <input type="text" data-ng-model="greeting">
+  <body data-ng-app="rabbitsApp">
+    <main data-ng-controller="rabbitsController" data-ng-init="getAll()">
+      <h1>This is for tracking a database of rabbits! Because, rabbits.</h1>
+      <p>You can see how many rabbits currently exist, update a given rabbit,
+         and add or remove a rabbit from the database.</p>
+
+      <!-- Error List -->
+      <aside data-ng-if="errors.length">
+        <h3>Errors:</h3>
+        <ul data-ng-repeat="error in errors">
+          <li>{{error.msg}}</li>
+        </ul>
+        <button data-ng-click="clearErrors()">Clear Errors</button>
+      </aside>
+
+      <!-- Editable list of Rabbits -->
+      <h2>Rabbits: </h2>
+      <ul data-ng-repeat="rabbit in rabbits">
+        <li>{{rabbit.name}}
+          <button data-ng-click="removeRabbit(rabbit)">Remove</button>
+          <button data-ng-if="!rabbit.editing" data-ng-click="editRabbit(rabbit)">Edit</button>
+          <form name="{{'editing' + rabbit._id}}" data-ng-if="rabbit.editing" data-ng-submit="saveRabbit(rabbit)">
+            Name: <input type="text" name="name" required data-ng-model="rabbit.name">
+            Weight: <input type="number" name="weight" min="0" max="20" required data-ng-model="rabbit.weight">
+            <button type="submit">Save Changes</button>
+            <button data-ng-click="cancelEdit(rabbit)">Cancel</button>
+          </form>
+        </li>
+      </ul>
+
+      <!-- New Rabbit Form -->
+      <form name="newRabbitForm" data-ng-submit="createNewRabbit(newRabbit)">
+        Name: <input type="text" name="name" required data-ng-model="newRabbit.name">
+        Weight: <input type="number" name="weight" min="0" max="20" required data-ng-model="newRabbit.weight">
+        <button type="submit" data-ng-disabled="newRabbitForm.$invalid">Add new rabbit</button>
+      </form>
     </main>
     <script type="text/javascript" src="bundle.js"></script>
   </body>
