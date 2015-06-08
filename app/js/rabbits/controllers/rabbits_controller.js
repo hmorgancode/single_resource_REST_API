@@ -40,7 +40,7 @@ module.exports = function(app) { //app === an angular module
       $http.delete('/rabbits/' + rabbit._id)//, {params: {id: rabbit._id}})
         .error(function(data) {
           console.log(data);
-          $scope.errors.push({msg: 'could not remove rabbit ' + rabbit.name});
+          $scope.errors.push({msg: 'could not remove rabbit: ' + rabbit.name});
           $scope.rabbits.splice(rabbitIndex, 0, rabbit); //Add the rabbit back to our list
       });
     };
@@ -55,7 +55,7 @@ module.exports = function(app) { //app === an angular module
         .error(function(data) {
           console.log(data);
           $scope.errors.push({msg: 'could not update rabbit'});
-          cancelEdit(rabbit); //Can I do this?
+          $scope.cancelEdit(rabbit); //Can I do this? Apparently!
         });
     };
 
