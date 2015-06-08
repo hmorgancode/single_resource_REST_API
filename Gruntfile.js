@@ -48,6 +48,13 @@ module.exports = function(grunt) {
           path: 'test/client/',
           filename: 'test_bundle.js'
         }
+      },
+      karma_test: {
+        entry: './test/karma_tests/karma_entry.js',
+        output: {
+          path: './test/karma_tests/',
+          filename: 'karma_test_bundle.js'
+        }
       }
     },
 

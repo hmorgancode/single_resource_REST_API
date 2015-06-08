@@ -35,3 +35,5 @@ database
 #build
 build
 test/client/test_bundle.js
+test/karma_tests/karma_test_bundle.js
+#could also just do **/bundle.js and **/test_bundle.js

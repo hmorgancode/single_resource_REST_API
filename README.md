@@ -10,3 +10,7 @@ single_resource_REST_API
   -app/index.html and test/client/test.html, respectively.
 
 -Currently, neither watch nor the webpack development server are set up, only manual checks.
+
+-To test:
+grunt webpack:karma_test
+karma start

@@ -2,8 +2,9 @@
 
 //webpack's entry point
 
-//This avoids a jshint error where angular is undefined, but keeping the old notes around for now:
-var angular = require('angular');
+//'angular' will technically be undefined, need to add it to our exceptions in .jshintrc
+//(we require angular/angular so everything's in the global namespace)
+require('angular/angular');
 
 var greet = require('./greet');
 
