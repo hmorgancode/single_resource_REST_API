@@ -1,14 +1,23 @@
 'use strict';
 
 module.exports = function(app) { //app === an angular module
-  app.controller('rabbitsController', ['$scope', '$http', function($scope, $http) {
+  app.controller('rabbitsController', ['$scope', '$http', 'RESTResource', function($scope, $http, restResource) {
+    var Rabbit = resource('rabbits');
     $scope.errors = []; //so you can just throw errors in here as they happen 
     $scope.rabbits = []; //(we need these to be $scope. so that we can access them in the view)
 
     //$http is how we make requests back to the server, like the jQuery AJAX request but more geared for angular
     //be wary, $http is a singleton.
     $scope.getAll = function() {
+<<<<<<< Updated upstream
       $http.get('/api/rabbits') //returns a promise!
+=======
+      Rabbit.getAll(function(err, data) {
+        if (err) return $scope.errors.push({msg: 'could not get rabbits'});
+        $scope.rabbits = data;
+      });
+      /*
+      $http.get('/rabbits') //returns a promise!
         .success(function(data) { //(callback has more params, check docs. headers and config will be good to check in case of bugs)
           $scope.rabbits = data;
         })
@@ -16,6 +25,7 @@ module.exports = function(app) { //app === an angular module
           console.log(data);
           $scope.errors.push({msg: 'error retrieving rabbits'});
         });
+      */
     };
 
     $scope.createNewRabbit = function() {
