@@ -8,7 +8,7 @@ module.exports = function(app) { //app === an angular module
     //$http is how we make requests back to the server, like the jQuery AJAX request but more geared for angular
     //be wary, $http is a singleton.
     $scope.getAll = function() {
-      $http.get('/rabbits') //returns a promise!
+      $http.get('/api/rabbits') //returns a promise!
         .success(function(data) { //(callback has more params, check docs. headers and config will be good to check in case of bugs)
           $scope.rabbits = data;
         })
@@ -21,7 +21,7 @@ module.exports = function(app) { //app === an angular module
     $scope.createNewRabbit = function() {
       $scope.rabbits.push($scope.newRabbit);
       var newRabbitIndex = $scope.rabbits.indexOf($scope.newRabbit); //In case we fail and need to remove it
-      $http.post('/rabbits', $scope.newRabbit)
+      $http.post('/api/rabbits', $scope.newRabbit)
         .success(function(data) {
           $scope.newRabbit = null;
           $scope.rabbits[newRabbitIndex] = data;
@@ -37,7 +37,7 @@ module.exports = function(app) { //app === an angular module
       var rabbitIndex = $scope.rabbits.indexOf(rabbit);
       $scope.rabbits.splice(rabbitIndex, 1); //We immediately remove the rabbit from our list, to be responsive
                                                                 //(If the request fails, we'll go back and inform the user.)
-      $http.delete('/rabbits/' + rabbit._id)//, {params: {id: rabbit._id}})
+      $http.delete('/api/rabbits/' + rabbit._id)//, {params: {id: rabbit._id}})
         .error(function(data) {
           console.log(data);
           $scope.errors.push({msg: 'could not remove rabbit: ' + rabbit.name});
@@ -48,7 +48,7 @@ module.exports = function(app) { //app === an angular module
     $scope.saveRabbit = function(rabbit) {
       rabbit.editing = false; //Send it back to our database to be saved, the extra property (editing) will be ignored.
 
-      $http.put('/rabbits', rabbit)
+      $http.put('/api/rabbits', rabbit)
         .success(function(data) {
           rabbit.origRabbit = null;
         })

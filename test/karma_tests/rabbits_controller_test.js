@@ -46,7 +46,7 @@ describe('rabbits controller', function() {
     });
 
     it('should make a get request on index', function() {
-      $httpBackend.expectGET('/rabbits').respond(200, [{_id: '1', name: 'Jon Stewart', weight: 4}]);
+      $httpBackend.expectGET('/api/rabbits').respond(200, [{_id: '1', name: 'Jon Stewart', weight: 4}]);
       $scope.getAll(); //this will actually make the request that we're expecting
       $httpBackend.flush(); //will actually send all our responses that we've set up
                             //(this is when our callbacks in getAll, etc... will get called)
@@ -57,7 +57,7 @@ describe('rabbits controller', function() {
 
     //We can do error testing here much more easily than in our integration tests
     it('should correctly handle errors', function() {
-      $httpBackend.expectGET('/rabbits').respond(500, {msg: 'server error'});
+      $httpBackend.expectGET('/api/rabbits').respond(500, {msg: 'server error'});
       $scope.getAll();
       $httpBackend.flush();
       expect($scope.errors.length).toBe(1);
@@ -65,7 +65,7 @@ describe('rabbits controller', function() {
     });
 
     it('should be able to save a new rabbit', function() {
-      $httpBackend.expectPOST('/rabbits').respond(200, {_id: '2', name: 'Drax, The Destroyer', weight: 10});
+      $httpBackend.expectPOST('/api/rabbits').respond(200, {_id: '2', name: 'Drax, The Destroyer', weight: 10});
       $scope.newRabbit = {name: 'Drax, The Destroyer', weight: 10};
       $scope.createNewRabbit();
       $httpBackend.flush();
@@ -75,7 +75,7 @@ describe('rabbits controller', function() {
     });
 
     it('should delete a rabbit', function() {
-      $httpBackend.expectDELETE('/rabbits/3').respond(200, {msg: 'success'});
+      $httpBackend.expectDELETE('/api/rabbits/3').respond(200, {msg: 'success'});
       var rabbit = {_id: '3', name: 'Ben', weight: 3}; //for the record, these ARE getting wiped every test.
       $scope.rabbits.push(rabbit);                      //(we just increment the ID every test for clarity)
       expect($scope.rabbits.indexOf(rabbit)).not.toBe(-1);
@@ -87,7 +87,7 @@ describe('rabbits controller', function() {
     });
 
     it('should handle errors when deleting a rabbit', function() {
-      $httpBackend.expectDELETE('/rabbits/4').respond(500, {msg: 'womp'});
+      $httpBackend.expectDELETE('/api/rabbits/4').respond(500, {msg: 'womp'});
       var rabbit = {_id: '4', name: 'Jerry', weight: 3};
       $scope.rabbits.push(rabbit); 
       //expect($scope.rabbits.indexOf(rabbit)).not.toBe(-1);
@@ -103,7 +103,7 @@ describe('rabbits controller', function() {
     });
 
     it('should update a rabbit', function() {
-      $httpBackend.expectPUT('/rabbits').respond(200, {msg: 'success'});
+      $httpBackend.expectPUT('/api/rabbits').respond(200, {msg: 'success'});
       //Create a rabbit, first
       $scope.rabbits.push({name: 'Drax, The Destroyer', weight: 10, _id: '1'});
       var testRabbit = $scope.rabbits[0];
@@ -145,7 +145,7 @@ describe('rabbits controller', function() {
     });
 
     it('should handle errors when updating a rabbit', function() {
-      $httpBackend.expectPUT('/rabbits').respond(500, {msg: 'internal server error'});
+      $httpBackend.expectPUT('/api/rabbits').respond(500, {msg: 'internal server error'});
       //Create a rabbit, first
       $scope.rabbits.push({name: 'Rocket', weight: 1, _id: '1'});
       var testRabbit = $scope.rabbits[0];

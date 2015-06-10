@@ -28,7 +28,7 @@ describe('Single-Resource REST API', function() {
 
   it('should be able to sign in a user', function(done) {
     chai.request('localhost:3000')
-      .get('/sign_in')
+      .get('/api/sign_in')
       .auth('bleh@example.com', 'foobar123')
       .end(function(err, res) {
         expect(err).to.eql(null);
@@ -41,7 +41,7 @@ describe('Single-Resource REST API', function() {
 
   it('should be able to add a new rabbit', function(done) {
     chai.request('localhost:3000')
-      .post('/rabbits')
+      .post('/api/rabbits')
       .send({eat: token, name: 'Shrubs', weight: 10})
       .end(function(err, res) {
         expect(err).to.eql(null);
@@ -54,7 +54,7 @@ describe('Single-Resource REST API', function() {
 
   it('should be able to get an array of all rabbits', function(done) {
     chai.request('localhost:3000')
-      .get('/rabbits')
+      .get('/api/rabbits')
       .send({eat: token})
       .end(function(err, res) {
         expect(err).to.eql(null);
@@ -84,7 +84,7 @@ describe('REST API continued', function() {
 
   it('should be able to update a rabbit', function(done) {
     chai.request('localhost:3000')
-      .put('/rabbits')
+      .put('/api/rabbits')
       .send({eat: token, name: 'Buckles 2', weight: 11, _id: testRabbit._id}) //that got dark quickly!
       .end(function(err, res) {
         expect(err).to.eql(null);
@@ -96,7 +96,7 @@ describe('REST API continued', function() {
 
   it('should be able to delete a rabbit', function(done) {
     chai.request('localhost:3000')
-      .delete('/rabbits/' + testRabbit._id)
+      .delete('/api/rabbits/' + testRabbit._id)
       //.send({eat: token, _id: testRabbit._id}) //(Buckles 2 just wasn't the same as Buckles 1)
       .end(function(err, res) {
         expect(err).to.eql(null);
