@@ -14,6 +14,8 @@ module.exports = function(app) {
     };
   };
 
+  //$http is how we make requests back to the server, like the jQuery AJAX request but more geared for angular
+  //be wary, $http is a singleton.
   app.factory('RESTResource', ['$http', function($http) {
     //Create a constructor function inside of here, and THEN use that function to build our resource-manipulating functionality
     //(we'll be using Node-style callbacks instead of promises)
@@ -32,7 +34,7 @@ module.exports = function(app) {
         },
 
         save: function(resourceData, callback) {
-          $http.put('/api/' + resourceName + '/' + resourceData._id, resourceData)
+          $http.put('/api/' + resourceName, resourceData) //+ '/' + resourceData._id, resourceData)
             .success(handleSuccess(callback))
             .error(handleError(callback));
         },

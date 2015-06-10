@@ -3,7 +3,7 @@
 module.exports = function(grunt) {
   var serverSide = ['Gruntfile.js', 'lib/**/*.js', 'test/auth_test.js',
                     'test/rest_api_test.js'];
-  var clientSide = ['app/**/*.js', 'test/karma_tests/*.js'];
+  var clientSide = ['app/**/*.js', 'test/karma_tests/!(karma_test_bundle).js'];
   var allSource = serverSide + clientSide;
 
   grunt.initConfig({
@@ -104,10 +104,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('karmatest', ['webpack:karmaTest', 'karma:test']);
   grunt.registerTask('build:dev', ['webpack:client', 'copy:html']);
-  grunt.registerTask('build:test', ['webpack:test']);
+  grunt.registerTask('build:nonkarmatest', ['webpack:test']);
+  grunt.registerTask('clienttest', ['jshint:client', 'webpack:karmaTest',
+                                    'karma:test', 'jscs:client']);
   grunt.registerTask('servertest', ['jshint:server',
                                     'mochaTest', 'jscs:server']);
-  //grunt.registerTask('default', ['test']);
+  grunt.registerTask('default', ['servertest', 'clienttest', 'build:dev']);
 };

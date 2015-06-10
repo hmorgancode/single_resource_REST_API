@@ -10,6 +10,7 @@ var greet = require('./greet'); //old test
 var rabbitsApp = angular.module('rabbitsApp', []);
 
 //services
+require('./services/deep_copy.js')(rabbitsApp);
 require('./services/rest_resource.js')(rabbitsApp);
 
 //controllers
