@@ -17,3 +17,4 @@ require('./services/rest_resource.js')(rabbitsApp);
 require('./rabbits/controllers/rabbits_controller.js')(rabbitsApp);
 
 //directives
+require('./directives/simple_directive.js')(rabbitsApp);
