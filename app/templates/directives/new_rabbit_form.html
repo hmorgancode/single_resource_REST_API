@@ -1,0 +1,5 @@
+<form name="newRabbitForm" data-ng-submit="createNewRabbit()">
+  Name: <input type="text" name="name" required data-ng-model="newRabbit.name">
+  Weight: <input type="number" name="weight" min="0" max="20" required data-ng-model="newRabbit.weight">
+  <button type="submit" data-ng-disabled="newRabbitForm.$invalid">Add new rabbit</button>
+</form>

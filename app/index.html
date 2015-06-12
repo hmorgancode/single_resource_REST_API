@@ -5,9 +5,7 @@
     <title>Interactive Rabbit Database</title>
   </head>
   <body data-ng-app="rabbitsApp">
-    <section data-simple-directive></section>
     <main data-ng-controller="rabbitsController" data-ng-init="getAll()">
-    <section data-simple-directive></section>
       <h1>This is for tracking a database of rabbits! Because, rabbits.</h1>
       <p>You can see how many rabbits currently exist, update a given rabbit,
          and add or remove a rabbit from the database.</p>
@@ -36,12 +34,14 @@
         </li>
       </ul>
 
-      <!-- New Rabbit Form -->
+      <div data-new-rabbit-form-directive></div>
+
+      <!-- New Rabbit Form
       <form name="newRabbitForm" data-ng-submit="createNewRabbit(newRabbit)">
         Name: <input type="text" name="name" required data-ng-model="newRabbit.name">
         Weight: <input type="number" name="weight" min="0" max="20" required data-ng-model="newRabbit.weight">
         <button type="submit" data-ng-disabled="newRabbitForm.$invalid">Add new rabbit</button>
-      </form>
+      </form>-->
     </main>
     <script type="text/javascript" src="bundle.js"></script>
   </body>
