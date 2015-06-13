@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = function(app) { //app === an angular module
-  app.controller('rabbitsController', ['$scope', 'RESTResource',
-  function($scope, restResource) {
+  app.controller('rabbitsController', ['$scope', 'RESTResource', 'deepCopy',
+  function($scope, restResource, deepCopy) {
     var Rabbit = restResource('rabbits');
     $scope.errors = []; //so you can just throw errors in here as they happen
     $scope.rabbits = []; //(we need these to be $scope. so that we can access them in the view)
@@ -14,16 +14,19 @@ module.exports = function(app) { //app === an angular module
       });
     };
 
-    $scope.createNewRabbit = function() {
-      $scope.rabbits.push($scope.newRabbit);
-      var newRabbitIndex = $scope.rabbits.indexOf($scope.newRabbit); //In case we fail and need to remove it
-      Rabbit.create($scope.newRabbit, function(err, data) {
+    $scope.createNewRabbit = function(rabbit) {
+      var newRabbit = deepCopy(rabbit);
+      rabbit.name = ''; //this will affect the newRabbit back in the directive's isolate scope
+      rabbit.weight = null;
+      $scope.rabbits.push(newRabbit);
+      var newRabbitIndex = $scope.rabbits.indexOf(newRabbit); //In case we fail and need to remove it
+      Rabbit.create(newRabbit, function(err, data) {
         if (err) {
           $scope.errors.push({msg: 'could not create new rabbit.'});
           $scope.rabbits.splice(newRabbitIndex, 1); //remove our wrongly-created rabbit
           return;
         }
-        $scope.newRabbit = null;
+        //$scope.newRabbit = null;
         $scope.rabbits[newRabbitIndex] = data;
       });
     };
