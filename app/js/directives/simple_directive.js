@@ -12,7 +12,8 @@ module.exports = function(app) {
     return {
       restrict: 'AC',
       //It's usually better to have an entire .html file as your template
-      template: '<h2>{{someVal}}</h2><input type="text" data-ng-model="someVal">',
+      template: '<h2>{{someVal}}</h2>' +
+                '<input type="text" data-ng-model="someVal">',
       //the way we can create an isolate scope:
       scope: {} //We immediately have a scope object for each and every instance of this directive.\
     };

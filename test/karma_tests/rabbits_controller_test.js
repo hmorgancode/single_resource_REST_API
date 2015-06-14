@@ -70,11 +70,12 @@ describe('rabbits controller', function() {
       $httpBackend.expectPOST('/api/rabbits').respond(200,
         {_id: '2', name: 'Drax, The Destroyer', weight: 10});
       $scope.newRabbit = {name: 'Drax, The Destroyer', weight: 10};
-      $scope.createNewRabbit();
+      $scope.createNewRabbit($scope.newRabbit);
       $httpBackend.flush();
       expect($scope.rabbits[0].name).toBe('Drax, The Destroyer');
       expect($scope.rabbits[0].weight).toBe(10);
-      expect($scope.newRabbit).toBe(null);
+      expect($scope.newRabbit.name).toBe(''); //newRabbit is a standin for the rabbit within
+      expect($scope.newRabbit.weight).toBe(null); //our directive's isolate scope
     });
 
     it('should delete a rabbit', function() {
