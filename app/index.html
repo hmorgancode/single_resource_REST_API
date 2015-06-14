@@ -23,23 +23,24 @@
       <h2>Rabbits: </h2>
       <ul data-ng-repeat="rabbit in rabbits">
         <li>{{rabbit.name}}
-          <button data-ng-click="removeRabbit(rabbit)">Remove</button>
-          <button data-ng-if="!rabbit.editing" data-ng-click="editRabbit(rabbit)">Edit</button>
-          <form name="{{'editing' + rabbit._id}}" data-ng-if="rabbit.editing" data-ng-submit="saveRabbit(rabbit)">
-            Name: <input type="text" name="name" required data-ng-model="rabbit.name">
-            Weight: <input type="number" name="weight" min="0" max="20" required data-ng-model="rabbit.weight">
-            <button type="submit">Save Changes</button>
-            <button data-ng-click="cancelEdit(rabbit)">Cancel</button>
-          </form>
+          <button data-ng-disabled="!rabbit._id" data-ng-click="removeRabbit(rabbit)">Remove</button>
+          <button data-ng-disabled="!rabbit._id" data-ng-if="!rabbit.editing" data-ng-click="editRabbit(rabbit)">Edit</button>
+          <div data-rabbit-form-directive
+               data-save="saveRabbit(rabbit)"
+               data-button-text="'Save Changes'"
+               data-label-text="Editing..."
+               data-ng-if="rabbit.editing"
+               data-rabbit="rabbit">
+           <button data-ng-click="cancelEdit(rabbit)">Cancel</button>
+           </div>
         </li>
       </ul>
 
       <!-- New Rabbit Form -->
-      <form name="newRabbitForm" data-ng-submit="createNewRabbit(newRabbit)">
-        Name: <input type="text" name="name" required data-ng-model="newRabbit.name">
-        Weight: <input type="number" name="weight" min="0" max="20" required data-ng-model="newRabbit.weight">
-        <button type="submit" data-ng-disabled="newRabbitForm.$invalid">Add new rabbit</button>
-      </form>
+      <div data-rabbit-form-directive
+           data-save="createNewRabbit(rabbit)"
+           data-button-text="'Create New Rabbit'"
+           data-label-text="Create A New Rabbit"></div>
     </main>
     <script type="text/javascript" src="bundle.js"></script>
   </body>

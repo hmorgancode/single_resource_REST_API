@@ -1,21 +1,26 @@
 'use strict';
 
 module.exports = function(grunt) {
-  var srcFiles = ['Gruntfile.js', 'lib/**/*.js', 'app/**/*.js',
-                  'test/**/!(test_bundle).js'];
+  var serverSide = ['Gruntfile.js', 'lib/**/*.js', 'test/auth_test.js',
+                    'test/rest_api_test.js'];
+  var clientSide = ['app/**/*.js', 'test/karma_tests/!(karma_test_bundle).js'];
+  var allSource = serverSide + clientSide;
 
   grunt.initConfig({
     mochaTest: {
       test: {
         options: {
         },
-        src: ['test/**/*.js']
+        src: serverSide
       }
     }, //end mochaTest
 
     jshint: {
-      all: {
-        src: srcFiles
+      server: {
+        src: serverSide
+      },
+      client: {
+        src: clientSide
       },
       options: {
         jshintrc: '.jshintrc'
@@ -23,14 +28,22 @@ module.exports = function(grunt) {
     }, //end jshint
 
     watch: {
-      files: srcFiles,
+      files: allSource + ['app/**/*.html'],
       tasks: ['test']
     }, //end watch
 
     jscs: {
-      src: srcFiles,
-      options: {
-        config: '.jscsrc'
+      server: {
+        src: serverSide,
+        options: {
+          config: '.jscsrc'
+        }
+      },
+      client: {
+        src: clientSide,
+        options: {
+          config: '.jscsrc'
+        }
       }
     }, //end jscs
 
@@ -49,12 +62,18 @@ module.exports = function(grunt) {
           filename: 'test_bundle.js'
         }
       },
-      karma_test: {
+      karmaTest: {
         entry: './test/karma_tests/karma_entry.js',
         output: {
           path: './test/karma_tests/',
           filename: 'karma_test_bundle.js'
         }
+      }
+    },
+
+    karma: {
+      test: {
+        configFile: 'karma.conf.js'
       }
     },
 
@@ -83,9 +102,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('build:dev', ['webpack:client', 'copy:html']);
-  grunt.registerTask('build:test', ['webpack:test']);
-  grunt.registerTask('test', ['jshint:all', 'mochaTest', 'jscs']);
-  grunt.registerTask('default', ['test']);
+  grunt.registerTask('build:nonkarmatest', ['webpack:test']);
+  grunt.registerTask('clienttest', ['jshint:client', 'webpack:karmaTest',
+                                    'karma:test', 'jscs:client']);
+  grunt.registerTask('servertest', ['jshint:server',
+                                    'mochaTest', 'jscs:server']);
+  grunt.registerTask('default', ['servertest', 'clienttest', 'build:dev']);
 };

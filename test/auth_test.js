@@ -27,7 +27,7 @@ describe('Authentication', function() {
 
   it('should be able to create a new user', function(done) {
     chai.request('localhost:3000')
-      .post('/create_user')
+      .post('/api/create_user')
       .send({username: 'justthisguy',
              email: 'bleh@example.com', password: 'foobar123'})
       .end(function(err, res) {
@@ -40,7 +40,7 @@ describe('Authentication', function() {
 
   it('should reject duplicate emails', function(done) {
     chai.request('localhost:3000')
-      .post('/create_user')
+      .post('/api/create_user')
       .send({username: 'lil_bobby_tables',
              email: 'bleh@example.com', password: 'foobar123'})
       .end(function(err, res) {
