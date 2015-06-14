@@ -18,4 +18,4 @@ require('./rabbits/controllers/rabbits_controller.js')(rabbitsApp);
 
 //directives
 require('./directives/simple_directive.js')(rabbitsApp);
-require('./rabbits/directives/new_rabbit_form_directive.js')(rabbitsApp);
+require('./rabbits/directives/rabbit_form_directive.js')(rabbitsApp);
