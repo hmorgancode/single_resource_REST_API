@@ -20,20 +20,3 @@ module.exports = function(app) {
     };
   });
 };
-
-//Passing a function from the parent scope into this scope: in index.html:
-//<div data-new-rabbit-form-directive data-create-new-rabbit="createNewRabbit(rabbit)"></div>
-//(We indicate both the function name, AND the arguments' names)
-//Then, in rabbit_form.html:
-//<form name="newRabbitForm" data-ng-submit="createNewRabbit({rabbit: newRabbit})">
-//We indicate the function, now registered within this directive's scope, that we want to call.
-//And we call it, *SPECIFYING EACH PARAMETER WE WANT TO PASS TO IT BY NAME*,
-//and it'll be evaluated in the original scope.
-//(Why specify the parameter names? The parameters aren't deeply copied, so I assume
-//it's just Angular being Angular., since Tyler
-
-//Three ways to pass something into a directive:
-//& is one, = is another, @ is another
-//@ will read the HTML directly, i.e. "My Label Text"
-//= wants javascript to parse, i.e. "'My Label Text' + myLabelName"
-//Look up & more thoroughly later.
