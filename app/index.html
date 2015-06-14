@@ -33,25 +33,14 @@
                data-rabbit="rabbit">
            <button data-ng-click="cancelEdit(rabbit)">Cancel</button>
            </div>
-          <!--<form name="{{'editing' + rabbit._id}}" data-ng-if="rabbit.editing" data-ng-submit="saveRabbit(rabbit)">
-            Name: <input type="text" name="name" required data-ng-model="rabbit.name">
-            Weight: <input type="number" name="weight" min="0" max="20" required data-ng-model="rabbit.weight">
-            <button type="submit">Save Changes</button>
-            <button data-ng-click="cancelEdit(rabbit)">Cancel</button>-->
         </li>
       </ul>
 
+      <!-- New Rabbit Form -->
       <div data-rabbit-form-directive
            data-save="createNewRabbit(rabbit)"
            data-button-text="'Create New Rabbit'"
            data-label-text="Create A New Rabbit"></div>
-
-      <!-- New Rabbit Form
-      <form name="newRabbitForm" data-ng-submit="createNewRabbit(newRabbit)">
-        Name: <input type="text" name="name" required data-ng-model="newRabbit.name">
-        Weight: <input type="number" name="weight" min="0" max="20" required data-ng-model="newRabbit.weight">
-        <button type="submit" data-ng-disabled="newRabbitForm.$invalid">Add new rabbit</button>
-      </form>-->
     </main>
     <script type="text/javascript" src="bundle.js"></script>
   </body>
