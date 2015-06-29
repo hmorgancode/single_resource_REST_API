@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Interactive Rabbit Database</title>
+  </head>
+  <body data-ng-app="rabbitsApp">
+    <main data-ng-controller="rabbitsController" data-ng-init="getAll()">
+      <h1>This is for tracking a database of rabbits! Because, rabbits.</h1>
+      <p>You can see how many rabbits currently exist, update a given rabbit,
+         and add or remove a rabbit from the database.</p>
+
+      <!-- Error List -->
+      <aside data-ng-if="errors.length">
+        <h3>Errors:</h3>
+        <ul data-ng-repeat="error in errors">
+          <li>{{error.msg}}</li>
+        </ul>
+        <button data-ng-click="clearErrors()">Clear Errors</button>
+      </aside>
+
+      <!-- Editable list of Rabbits -->
+      <h2>Rabbits: </h2>
+      <ul data-ng-repeat="rabbit in rabbits">
+        <li>{{rabbit.name}}
+          <button data-ng-disabled="!rabbit._id" data-ng-click="removeRabbit(rabbit)">Remove</button>
+          <button data-ng-disabled="!rabbit._id" data-ng-if="!rabbit.editing" data-ng-click="editRabbit(rabbit)">Edit</button>
+          <div data-rabbit-form-directive
+               data-save="saveRabbit(rabbit)"
+               data-button-text="'Save Changes'"
+               data-label-text="Editing..."
+               data-ng-if="rabbit.editing"
+               data-rabbit="rabbit">
+           <button data-ng-click="cancelEdit(rabbit)">Cancel</button>
+           </div>
+        </li>
+      </ul>
+
+      <!-- New Rabbit Form -->
+      <div data-rabbit-form-directive
+           data-save="createNewRabbit(rabbit)"
+           data-button-text="'Create New Rabbit'"
+           data-label-text="Create A New Rabbit"></div>
+    </main>
+    <script type="text/javascript" src="bundle.js"></script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "node": true,
+  "globals": {
+    "angular": true,
+    "expect": true,
+    "describe": true,
+    "it": true,
+    "before": true,
+    "after": true,
+    "beforeEach": true,
+    "afterEach": true
+  }
+}
